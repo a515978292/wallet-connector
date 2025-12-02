@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import PageHeader from "../components/PageHeader";
 
 export default function WalletPage() {
   const [isConnected, setIsConnected] = useState(false);
@@ -9,19 +10,7 @@ export default function WalletPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 dark:from-gray-900 dark:to-gray-800">
-      <nav className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link
-            href="/"
-            className="text-xl font-bold text-gray-900 dark:text-white hover:text-indigo-600 transition-colors"
-          >
-            ← 返回首页
-          </Link>
-          <div className="text-sm text-gray-600 dark:text-gray-300">
-            钱包连接器
-          </div>
-        </div>
-      </nav>
+      <PageHeader title="钱包连接器" />
 
       <main className="max-w-4xl mx-auto px-6 py-12">
         <div className="text-center mb-12">
