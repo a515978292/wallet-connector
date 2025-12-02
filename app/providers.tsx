@@ -24,6 +24,10 @@ import { mainnet, sepolia } from "wagmi/chains";
 // 从 React Query 导入：用于管理异步数据（缓存、自动刷新等）
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+// 导入钱包连接器：支持不同的钱包类型
+import { injected } from "wagmi/connectors";
+// import { walletConnect } from "wagmi/connectors"; // 如需移动端钱包支持可取消注释
+
 // ==================== 第二步：配置 Web3 连接 ====================
 
 /**
@@ -31,6 +35,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
  *
  * 这就像配置你的"网络设置"：
  * - chains: 支持哪些区块链网络
+ * - connectors: 支持哪些钱包连接方式
  * - transports: 每个链的 RPC 连接配置
  */
 const config = createConfig({
@@ -38,11 +43,22 @@ const config = createConfig({
   // mainnet = 以太坊主网（Chain ID: 1）
   // sepolia = 以太坊测试网（Chain ID: 11155111）
   // 💡 开发时用 sepolia，上线后可以加入 mainnet
-  chains: [mainnet, sepolia],
+  //   chains: [mainnet, sepolia],
+  chains: [sepolia],
+
+  // 钱包连接器配置
+  // injected = 浏览器内置钱包（如 MetaMask）
+  connectors: [
+    injected({
+      // 指定支持的钱包
+      // 可选：shimDisconnect: true 表示页面刷新时保持连接状态
+      shimDisconnect: true,
+    }),
+  ],
 
   // 配置每个链的 RPC 传输方式
   transports: {
-    [mainnet.id]: http(),
+    // [mainnet.id]: http(),
     [sepolia.id]: http(),
   },
 });
