@@ -51,7 +51,7 @@ Week 11-12► 综合项目 + 求职           [40小时]
 
 **钱包集成**
 
-- RainbowKit (推荐) 或 Web3Modal
+- wagmi 原生连接器
 
 **开发工具**
 
@@ -137,7 +137,6 @@ cd wallet-connector
 
 # 5. 安装Web3依赖
 npm install wagmi viem @tanstack/react-query
-npm install @rainbow-me/rainbowkit
 ```
 
 #### 项目 1：钱包连接器
@@ -158,14 +157,13 @@ npm install @rainbow-me/rainbowkit
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { mainnet, sepolia } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { RainbowKitProvider, getDefaultConfig } from "@rainbow-me/rainbowkit";
-import "@rainbow-me/rainbowkit/styles.css";
 
-const config = getDefaultConfig({
-  appName: "Wallet Connector",
-  projectId: "YOUR_WALLETCONNECT_PROJECT_ID",
+const config = createConfig({
   chains: [mainnet, sepolia],
-  ssr: true,
+  transports: {
+    [mainnet.id]: http(),
+    [sepolia.id]: http(),
+  },
 });
 
 const queryClient = new QueryClient();
@@ -173,9 +171,7 @@ const queryClient = new QueryClient();
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>{children}</RainbowKitProvider>
-      </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProvider>
   );
 }
@@ -185,7 +181,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
 // app/page.tsx
 "use client";
 import { useAccount, useBalance, useChainId } from "wagmi";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -196,7 +191,7 @@ export default function Home() {
     <main className="min-h-screen p-8">
       <h1 className="text-4xl font-bold mb-8">我的第一个DApp</h1>
 
-      <ConnectButton />
+      {/* 钱包连接按钮 - 使用 wagmi hooks 实现 */}
 
       {isConnected && (
         <div className="mt-8 p-6 bg-white rounded-lg shadow-lg">
@@ -963,7 +958,7 @@ const NFTGrid = dynamic(() => import("@/components/Dashboard/NFTGrid"), {
 ## 💻 技能栈
 
 - **前端**: React, Next.js, TypeScript, TailwindCSS
-- **Web3**: wagmi, viem, ethers.js, RainbowKit
+- **Web3**: wagmi, viem, ethers.js
 - **工具**: Git, Hardhat, IPFS, Vercel
 
 ## 📝 技术文章
@@ -1037,7 +1032,6 @@ const NFTGrid = dynamic(() => import("@/components/Dashboard/NFTGrid"), {
 - [wagmi.sh](https://wagmi.sh) - 每天查，你的圣经
 - [viem.sh](https://viem.sh) - 理解底层实现
 - [Ethereum.org](https://ethereum.org) - 概念学习
-- [RainbowKit](https://www.rainbowkit.com) - 钱包集成
 
 **进阶文档** ⭐⭐⭐⭐
 
@@ -1113,9 +1107,6 @@ const NFTGrid = dynamic(() => import("@/components/Dashboard/NFTGrid"), {
 
   - 官方示例
   - github.com/wagmi-dev/wagmi/tree/main/examples
-
-- **RainbowKit Examples** ⭐⭐⭐⭐
-  - 钱包集成参考
 
 ### 社区与工具
 

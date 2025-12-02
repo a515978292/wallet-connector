@@ -12,7 +12,7 @@ export default function WalletPage() {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 dark:from-gray-900 dark:to-gray-800">
       <PageHeader title="钱包连接器" />
 
-      <main className="max-w-4xl mx-auto px-6 py-12">
+      <main className="w-4xl mx-auto px-6 py-12">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             👛 钱包连接器
@@ -79,7 +79,7 @@ export default function WalletPage() {
               <span className="text-indigo-600 dark:text-indigo-400 mr-2">
                 •
               </span>
-              <span>使用 RainbowKit 实现多钱包连接界面</span>
+              <span>使用 wagmi 实现钱包连接功能</span>
             </li>
             <li className="flex items-start">
               <span className="text-indigo-600 dark:text-indigo-400 mr-2">

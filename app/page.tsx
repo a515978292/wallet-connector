@@ -21,8 +21,7 @@ export default function Home() {
                 钱包连接器
               </h2>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                学习如何使用 RainbowKit 和 wagmi 连接 MetaMask、WalletConnect
-                等多种 Web3 钱包
+                学习如何使用 wagmi 连接 MetaMask 等多种 Web3 钱包
               </p>
               <div className="mt-6 text-indigo-600 dark:text-indigo-400 font-medium group-hover:translate-x-2 transition-transform inline-flex items-center">
                 开始学习 →
