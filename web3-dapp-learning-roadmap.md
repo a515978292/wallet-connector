@@ -220,21 +220,39 @@ export default function Home() {
 
 #### 关键 API 学习
 
-**useAccount**
+**useConnection** ✨ v3 新 API
 
-- 获取连接状态和地址
+- 一站式获取所有连接信息（替代 v1/v2 的 useAccount + useChainId）
 - `address`: 当前钱包地址
+- `chainId`: 当前链 ID（1 = Ethereum, 56 = BSC, 137 = Polygon）
+- `chain`: 完整的链信息对象（包含 name, nativeCurrency 等）
 - `isConnected`: 是否已连接
+- `status`: 连接状态（'connected' | 'connecting' | 'disconnected' | 'reconnecting'）
+- `connector`: 当前使用的连接器
+
+**useConnectors** ✨ v3 新 API
+
+- 获取可用的钱包连接器列表
+- 替代了 v1/v2 中 `useConnect` 返回的 `connectors`
+
+**useConnect**
+
+- 执行连接操作
+- `connect({ connector })`: 连接指定的钱包
+- `isPending`: 是否正在连接中
+
+**useDisconnect**
+
+- 断开钱包连接
+- `disconnect()`: 执行断开操作
 
 **useBalance**
 
 - 查询账户余额
-- 支持 ETH 和 ERC20
-
-**useChainId**
-
-- 获取当前链 ID
-- 1 = Ethereum, 56 = BSC, 137 = Polygon
+- 支持 ETH（原生代币）和 ERC20 代币
+- ETH: `useBalance({ address })`
+- ERC20: `useBalance({ address, token: '0x...' })`
+- 返回: `{ value: bigint, decimals: number, symbol: string }`
 
 #### 作业与练习
 

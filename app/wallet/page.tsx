@@ -15,6 +15,7 @@ import {
 // 导入 viem 工具函数用于格式化余额
 import { formatUnits } from "viem";
 import useMounted from "../hooks/useMounted";
+import { useEffect } from "react";
 
 export default function WalletPage() {
   /**
@@ -52,9 +53,14 @@ export default function WalletPage() {
     address: address,
   });
 
-  console.log("balance", balance);
-
   const mounted = useMounted();
+
+  useEffect(() => {
+    if (balance) {
+      const balanceValue = formatUnits(balance.value, balance.decimals);
+      console.log(balanceValue, typeof balanceValue, parseFloat(balanceValue));
+    }
+  }, [balance]);
 
   if (!mounted) {
     return null;
