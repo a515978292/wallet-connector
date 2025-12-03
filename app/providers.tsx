@@ -46,16 +46,6 @@ const config = createConfig({
   //   chains: [mainnet, sepolia],
   chains: [sepolia],
 
-  // 钱包连接器配置
-  // injected = 浏览器内置钱包（如 MetaMask）
-  connectors: [
-    injected({
-      // 指定支持的钱包
-      // 可选：shimDisconnect: true 表示页面刷新时保持连接状态
-      shimDisconnect: true,
-    }),
-  ],
-
   // 配置每个链的 RPC 传输方式
   transports: {
     // [mainnet.id]: http(),
