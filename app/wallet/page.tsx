@@ -3,44 +3,54 @@
 import Link from "next/link";
 import PageHeader from "../components/PageHeader";
 
-// ==================== 导入 wagmi hooks ====================
-// 这些是 wagmi 提供的 React Hooks，用于与钱包交互
+// ==================== 导入 wagmi v3 hooks ====================
+// 这些是 wagmi v3 提供的最新 React Hooks，用于与钱包交互
 import {
-  useAccount,
-  useConnect,
-  useDisconnect,
-  useBalance,
-  useChainId,
+  useConnection, // ✨ v3 新 API：替代 useAccount
+  useConnectors, // ✨ v3 新 API：获取连接器列表
+  useConnect, // 连接钱包
+  useDisconnect, // 断开钱包
+  useBalance, // 查询余额
 } from "wagmi";
 
 // 导入 viem 工具函数用于格式化余额
 import { formatUnits } from "viem";
 
 export default function WalletPage() {
-  // ==================== 使用 wagmi hooks ====================
+  // ==================== 使用 wagmi v3 hooks ====================
 
-  // 1. useAccount - 获取账户信息
-  // address: 钱包地址
-  // isConnected: 是否已连接
-  // isConnecting: 是否正在连接
-  const { address, isConnected, isConnecting } = useAccount();
+  // 1. ✨ useConnection - 获取连接信息（v3 新 API）
+  // 这是 wagmi v3 的核心 hook，替代了 v2 的 useAccount
+  // 返回值包含：
+  // - address: 当前钱包地址
+  // - addresses: 所有连接的地址（数组）
+  // - chainId: 当前链 ID（无需单独使用 useChainId）
+  // - chain: 完整的链信息对象
+  // - connector: 当前使用的连接器
+  // - isConnected: 是否已连接
+  // - isConnecting: 是否正在连接中
+  // - isReconnecting: 是否正在重新连接
+  // - status: 连接状态（'connected' | 'connecting' | 'disconnected' | 'reconnecting'）
+  const { address, chainId, chain, isConnected, isConnecting, status } =
+    useConnection();
 
-  // 2. useConnect - 连接钱包
-  // connectors: 可用的连接器列表（我们配置的 injected）
+  // 2. ✨ useConnectors - 获取可用的连接器列表（v3 新 API）
+  // 在 v3 中，connectors 从 useConnect 中分离出来了
+  const connectors = useConnectors();
+
+  // 3. useConnect - 连接钱包
   // connect: 连接函数
-  const { connectors, connect, isPending } = useConnect();
+  // isPending: 是否正在处理连接请求
+  const { connect, isPending } = useConnect();
 
-  // 3. useDisconnect - 断开连接
+  // 4. useDisconnect - 断开连接
   const { disconnect } = useDisconnect();
 
-  // 4. useBalance - 获取余额
-  // 只在连接时查询余额
+  // 5. useBalance - 获取余额
+  // 只在有地址时查询余额
   const { data: balance } = useBalance({
     address: address,
   });
-
-  // 5. useChainId - 获取当前链 ID
-  const chainId = useChainId();
 
   // ==================== 渲染 UI ====================
   return (
@@ -111,15 +121,49 @@ export default function WalletPage() {
                   </div>
                 )}
 
-                {/* 显示链 ID */}
+                {/* 显示链信息（v3 增强） */}
                 <div className="mb-6">
                   <p className="text-gray-600 dark:text-gray-300 text-sm">
-                    网络
+                    网络信息
                   </p>
-                  <p className="text-lg font-semibold text-gray-900 dark:text-white">
-                    Chain ID: {chainId}
-                    {chainId === 11155111 && " (Sepolia 测试网)"}
-                  </p>
+                  <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg space-y-2">
+                    <p className="text-sm">
+                      <span className="text-gray-500 dark:text-gray-400">
+                        Chain ID:{" "}
+                      </span>
+                      <span className="font-mono text-gray-900 dark:text-white">
+                        {chainId}
+                      </span>
+                    </p>
+                    {chain && (
+                      <>
+                        <p className="text-sm">
+                          <span className="text-gray-500 dark:text-gray-400">
+                            Chain Name:{" "}
+                          </span>
+                          <span className="font-semibold text-gray-900 dark:text-white">
+                            {chain.name}
+                          </span>
+                        </p>
+                        <p className="text-sm">
+                          <span className="text-gray-500 dark:text-gray-400">
+                            Currency:{" "}
+                          </span>
+                          <span className="text-gray-900 dark:text-white">
+                            {chain.nativeCurrency.symbol}
+                          </span>
+                        </p>
+                      </>
+                    )}
+                    <p className="text-sm">
+                      <span className="text-gray-500 dark:text-gray-400">
+                        Status:{" "}
+                      </span>
+                      <span className="font-semibold text-green-600 dark:text-green-400">
+                        {status} ✓
+                      </span>
+                    </p>
+                  </div>
                 </div>
 
                 {/* 断开连接按钮 */}
@@ -139,15 +183,25 @@ export default function WalletPage() {
         {/* 学习要点卡片 */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
           <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-            📚 核心知识点
+            📚 核心知识点（Wagmi v3 最新 API）
           </h2>
           <ul className="space-y-3 text-gray-600 dark:text-gray-300">
             <li className="flex items-start">
               <span className="text-indigo-600 dark:text-indigo-400 mr-2">
-                ✅
+                ✨
               </span>
               <span>
-                <strong>useAccount</strong> - 获取钱包地址和连接状态
+                <strong>useConnection</strong> - v3 新 API！一站式获取地址、链
+                ID、连接状态等所有信息
+              </span>
+            </li>
+            <li className="flex items-start">
+              <span className="text-indigo-600 dark:text-indigo-400 mr-2">
+                ✨
+              </span>
+              <span>
+                <strong>useConnectors</strong> - v3 新
+                API！获取可用的连接器列表（替代 useConnect 中的 connectors）
               </span>
             </li>
             <li className="flex items-start">
@@ -155,7 +209,7 @@ export default function WalletPage() {
                 ✅
               </span>
               <span>
-                <strong>useConnect</strong> - 连接钱包，支持多种连接器
+                <strong>useConnect</strong> - 执行连接操作
               </span>
             </li>
             <li className="flex items-start">
@@ -176,10 +230,13 @@ export default function WalletPage() {
             </li>
             <li className="flex items-start">
               <span className="text-indigo-600 dark:text-indigo-400 mr-2">
-                ✅
+                💡
               </span>
-              <span>
-                <strong>useChainId</strong> - 获取当前区块链网络 ID
+              <span className="text-sm">
+                <em>
+                  v3 API 改进：useChainId → useConnection，useConnect.connectors
+                  → useConnectors
+                </em>
               </span>
             </li>
           </ul>
