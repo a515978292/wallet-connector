@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import PageHeader from "../components/PageHeader";
+import PageHeader from "../../components/PageHeader";
 
 // ==================== 导入 wagmi v3 hooks ====================
 // 这些是 wagmi v3 提供的最新 React Hooks，用于与钱包交互
@@ -15,6 +15,8 @@ import {
 
 // 导入 viem 工具函数用于格式化余额
 import { formatUnits } from "viem";
+import { useEffect, useState } from "react";
+import useMounted from "../hooks/useMounted";
 
 export default function WalletPage() {
   // ==================== 使用 wagmi v3 hooks ====================
@@ -51,6 +53,12 @@ export default function WalletPage() {
   const { data: balance } = useBalance({
     address: address,
   });
+
+  const mounted = useMounted();
+
+  if (!mounted) {
+    return null;
+  }
 
   // ==================== 渲染 UI ====================
   return (
