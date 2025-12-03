@@ -7,13 +7,11 @@
  * 就像给房子接通水电一样，让所有房间都能用上
  *
  * 包含两个核心功能：
- * 1. 钱包连接（WagmiProvider）
- * 2. 数据缓存（QueryClientProvider）
+ * 1. 提供 Web3 连接能力（WagmiProvider）
+ * 2. 提供数据管理能力（QueryClientProvider）
  */
 
-"use client"; // ⚠️ 必须标记为客户端组件，因为需要浏览器环境
-
-// ==================== 第一步：导入所需的库 ====================
+"use client";
 
 // 从 wagmi 导入：核心的 Web3 React Hooks 库
 import { WagmiProvider, createConfig, http } from "wagmi";
@@ -23,8 +21,6 @@ import { mainnet, sepolia } from "wagmi/chains";
 
 // 从 React Query 导入：用于管理异步数据（缓存、自动刷新等）
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-// ==================== 第二步：配置 Web3 连接 ====================
 
 /**
  * 创建 wagmi 配置
@@ -42,8 +38,6 @@ const config = createConfig({
   },
 });
 
-// ==================== 第三步：创建 Query Client ====================
-
 /**
  * 创建 QueryClient 实例
  *
@@ -56,32 +50,12 @@ const config = createConfig({
  */
 const queryClient = new QueryClient();
 
-// ==================== 第四步：导出 Providers 组件 ====================
-
-/**
- * Providers 组件
- *
- * 这个组件会包裹整个应用（在 layout.tsx 中使用）
- *
- * @param {React.ReactNode} children - 子组件（你的整个应用）
- *
- * 两层嵌套的原因：
- * 1. WagmiProvider       → 最外层，提供 Web3 基础能力
- * 2. QueryClientProvider → 中间层，提供数据管理能力
- *
- * 📌 重要：顺序不能乱！wagmi 需要 QueryClient
- */
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    // 第一层：WagmiProvider - 提供 Web3 连接能力
-    // 传入上面配置的 config，告诉它连接哪些网络
     <WagmiProvider config={config}>
       {/* 第二层：QueryClientProvider - 提供数据缓存能力 */}
       {/* 传入 queryClient，用于管理所有数据请求 */}
-      <QueryClientProvider client={queryClient}>
-        {/* 这里是你的应用内容（所有页面和组件） */}
-        {children}
-      </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </WagmiProvider>
   );
 }
