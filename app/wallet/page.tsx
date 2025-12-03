@@ -3,10 +3,9 @@
 import Link from "next/link";
 import PageHeader from "../../components/PageHeader";
 
-// ==================== 导入 wagmi v3 hooks ====================
-// 这些是 wagmi v3 提供的最新 React Hooks，用于与钱包交互
+// ==================== 导入 wagmi v3 hooks 用于与钱包交互 ====================
 import {
-  useConnection, // ✨ v3 新 API：替代 useAccount
+  useConnection, // ✨ v3 新 API
   useConnectors, // ✨ v3 新 API：获取连接器列表
   useConnect, // 连接钱包
   useDisconnect, // 断开钱包
@@ -15,44 +14,45 @@ import {
 
 // 导入 viem 工具函数用于格式化余额
 import { formatUnits } from "viem";
-import { useEffect, useState } from "react";
 import useMounted from "../hooks/useMounted";
 
 export default function WalletPage() {
-  // ==================== 使用 wagmi v3 hooks ====================
-
-  // 1. ✨ useConnection - 获取连接信息（v3 新 API）
-  // 这是 wagmi v3 的核心 hook，替代了 v2 的 useAccount
-  // 返回值包含：
-  // - address: 当前钱包地址
-  // - addresses: 所有连接的地址（数组）
-  // - chainId: 当前链 ID（无需单独使用 useChainId）
-  // - chain: 完整的链信息对象
-  // - connector: 当前使用的连接器
-  // - isConnected: 是否已连接
-  // - isConnecting: 是否正在连接中
-  // - isReconnecting: 是否正在重新连接
-  // - status: 连接状态（'connected' | 'connecting' | 'disconnected' | 'reconnecting'）
-  const { address, chainId, chain, isConnected, isConnecting, status } =
-    useConnection();
+  /**
+   * 1. ✨ useConnection是 wagmi v3 的核心 hook，获取连接信息 包含地址、链 ID、链信息、连接器、连接状态等
+   * address: 当前钱包地址
+   * chainId: 当前链 ID
+   * chain: 完整的链信息对象
+   * connector: 当前使用的连接器
+   * isConnected: 是否已连接
+   * isConnecting: 是否正在连接中
+   * isReconnecting: 是否正在重新连接
+   * status: 连接状态（'connected' | 'connecting' | 'disconnected' | 'reconnecting'）
+   */
+  const {
+    address,
+    chainId,
+    chain,
+    isConnected,
+    isConnecting,
+    status,
+    connector,
+  } = useConnection();
 
   // 2. ✨ useConnectors - 获取可用的连接器列表（v3 新 API）
-  // 在 v3 中，connectors 从 useConnect 中分离出来了
   const connectors = useConnectors();
 
   // 3. useConnect - 连接钱包
-  // connect: 连接函数
-  // isPending: 是否正在处理连接请求
   const { connect, isPending } = useConnect();
 
   // 4. useDisconnect - 断开连接
   const { disconnect } = useDisconnect();
 
   // 5. useBalance - 获取余额
-  // 只在有地址时查询余额
   const { data: balance } = useBalance({
     address: address,
   });
+
+  console.log("balance", balance);
 
   const mounted = useMounted();
 
@@ -123,7 +123,7 @@ export default function WalletPage() {
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">
                       {parseFloat(
                         formatUnits(balance.value, balance.decimals)
-                      ).toFixed(4)}{" "}
+                      ).toFixed(4)}
                       {balance.symbol}
                     </p>
                   </div>
