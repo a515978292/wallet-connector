@@ -38,6 +38,7 @@ export default function WalletPage() {
     status,
     connector,
   } = useConnection();
+  console.log("chain:", chain);
 
   // 2. ✨ useConnectors - 获取可用的连接器列表（v3 新 API）
   const connectors = useConnectors();
@@ -58,7 +59,6 @@ export default function WalletPage() {
   useEffect(() => {
     if (balance) {
       const balanceValue = formatUnits(balance.value, balance.decimals);
-      console.log(balanceValue, typeof balanceValue, parseFloat(balanceValue));
     }
   }, [balance]);
 

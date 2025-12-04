@@ -14,7 +14,7 @@
 "use client";
 
 // 从 wagmi 导入：核心的 Web3 React Hooks 库
-import { WagmiProvider, createConfig, http } from "wagmi";
+import { WagmiProvider, createConfig, http, injected } from "wagmi";
 
 // 导入区块链网络配置：mainnet（主网）和 sepolia（测试网）
 import { mainnet, sepolia } from "wagmi/chains";
@@ -30,12 +30,21 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
  * - connectors: 支持哪些钱包连接方式
  * - transports: 每个链的 RPC 连接配置
  */
+
+const infuraKey = process.env.NEXT_PUBLIC_INFURA_KEY || "";
+
 const config = createConfig({
-  chains: [sepolia, mainnet],
+  chains: [mainnet, sepolia], // mainnet 是第一个，自动成为默认链
   transports: {
-    [sepolia.id]: http(),
-    [mainnet.id]: http(),
+    [mainnet.id]: http(
+      `https://mainnet.infura.io/v3/${infuraKey}`
+    ),
+
+    [sepolia.id]: http(
+      `https://sepolia.infura.io/v3/${infuraKey}`
+    ),
   },
+  ssr: true,
 });
 
 /**
