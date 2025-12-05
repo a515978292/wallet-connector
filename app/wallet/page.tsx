@@ -15,7 +15,7 @@ import {
 // 导入 viem 工具函数用于格式化余额
 import { formatUnits } from "viem";
 import useMounted from "../hooks/useMounted";
-import { useEffect } from "react";
+import { useLatestBlockNumber } from "../hooks/useLatestBlockNumber";
 
 export default function WalletPage() {
   /**
@@ -38,7 +38,6 @@ export default function WalletPage() {
     status,
     connector,
   } = useConnection();
-  console.log("chain:", chain);
 
   // 2. ✨ useConnectors - 获取可用的连接器列表（v3 新 API）
   const connectors = useConnectors();
@@ -56,11 +55,7 @@ export default function WalletPage() {
 
   const mounted = useMounted();
 
-  useEffect(() => {
-    if (balance) {
-      const balanceValue = formatUnits(balance.value, balance.decimals);
-    }
-  }, [balance]);
+  const { blockNumber, isLoading, isError } = useLatestBlockNumber();
 
   if (!mounted) {
     return null;
@@ -165,6 +160,18 @@ export default function WalletPage() {
                           </span>
                           <span className="text-gray-900 dark:text-white">
                             {chain.nativeCurrency.symbol}
+                          </span>
+                        </p>
+                        <p className="text-sm">
+                          <span className="text-gray-500 dark:text-gray-400">
+                            latest BlockNumber:{" "}
+                          </span>
+                          <span className="text-gray-900 dark:text-white">
+                            {isLoading
+                              ? "加载中..."
+                              : isError
+                              ? "获取失败"
+                              : blockNumber?.toString() || "未连接"}
                           </span>
                         </p>
                       </>

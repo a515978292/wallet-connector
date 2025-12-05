@@ -36,13 +36,9 @@ const infuraKey = process.env.NEXT_PUBLIC_INFURA_KEY || "";
 const config = createConfig({
   chains: [mainnet, sepolia], // mainnet 是第一个，自动成为默认链
   transports: {
-    [mainnet.id]: http(
-      `https://mainnet.infura.io/v3/${infuraKey}`
-    ),
+    [mainnet.id]: http(`https://mainnet.infura.io/v3/${infuraKey}`),
 
-    [sepolia.id]: http(
-      `https://sepolia.infura.io/v3/${infuraKey}`
-    ),
+    [sepolia.id]: http(`https://sepolia.infura.io/v3/${infuraKey}`),
   },
   ssr: true,
 });
