@@ -23,7 +23,6 @@ export const useLatestBlockNumber = () => {
     watch: isConnected, // 开启监听，区块号会自动更新
     query: { enabled: isConnected }, // 仅在已连接时查询
   });
-  console.log("useLatestBlockNumber", { blockNumber, isLoading, isError });
 
   return { blockNumber, isLoading, isError };
 };

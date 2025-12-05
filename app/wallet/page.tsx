@@ -15,7 +15,7 @@ import {
 // 导入 viem 工具函数用于格式化余额
 import { formatUnits } from "viem";
 import useMounted from "../hooks/useMounted";
-import { useLatestBlockNumber } from "../hooks/useLatestBlockNumber";
+import { useLatestBlockNumber } from "../hooks/useLatestBlock";
 
 export default function WalletPage() {
   /**
@@ -49,13 +49,13 @@ export default function WalletPage() {
   const { disconnect } = useDisconnect();
 
   // 5. useBalance - 获取余额
-  const { data: balance } = useBalance({
+  const { data: balance, refetch } = useBalance({
     address: address,
+    query: { enabled: isConnected, refetchInterval: 12000 }, // 仅在已连接时查询余额 ， 12秒刷新一次
   });
 
-  const mounted = useMounted();
-
   const { blockNumber, isLoading, isError } = useLatestBlockNumber();
+  const mounted = useMounted();
 
   if (!mounted) {
     return null;
