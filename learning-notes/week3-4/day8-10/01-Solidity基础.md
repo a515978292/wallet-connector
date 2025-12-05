@@ -8,12 +8,14 @@
 ## 重要说明 ⚠️
 
 作为前端开发者，你**不需要成为 Solidity 专家**，只需要：
+
 - ✅ 能看懂合约代码
 - ✅ 知道如何调用函数
 - ✅ 理解事件机制
 - ✅ 理解基本数据类型
 
 ❌ **不需要深入学习**：
+
 - 汇编（Assembly）
 - 高级安全审计
 - Gas 优化细节
@@ -21,7 +23,7 @@
 
 ---
 
-## 一、30分钟 Solidity 核心语法
+## 一、30 分钟 Solidity 核心语法
 
 ### 1.1 基础合约结构
 
@@ -56,6 +58,16 @@ contract SimpleStorage {
         emit ValueChanged(_value, msg.sender);
     }
 
+    // pure: 纯计算， 不读不写
+      function add(uint256 a, uint256 b) public pure returns (uint256) {
+        return a + b;  // 只用参数计算
+    }
+
+    //external：只能外部调用
+    function externalFunc() external pure returns (string memory) {
+        return "I'm external";
+    }
+
     // payable 函数（可以接收 ETH）
     function deposit() public payable {
         balances[msg.sender] += msg.value;
@@ -69,14 +81,14 @@ contract SimpleStorage {
 
 ### 2.1 函数修饰符
 
-| 关键字 | 含义 | 前端影响 | 示例 |
-|--------|------|----------|------|
-| `public` | 可外部调用 | ✅ 可以从前端调用 | `function getTodos() public` |
-| `view` | 只读函数 | ✅ 不需要 Gas，立即返回 | `function balanceOf() public view` |
-| `pure` | 纯函数 | ✅ 不读状态，不需要 Gas | `function add(a, b) public pure` |
-| `payable` | 可接收 ETH | ✅ 调用时可发送 ETH | `function deposit() public payable` |
-| `private` | 仅合约内部 | ❌ 前端无法调用 | `function _internal() private` |
-| `external` | 外部调用 | ✅ 前端可以调用 | `function execute() external` |
+| 关键字     | 含义              | 前端影响                | 示例                                |
+| ---------- | ----------------- | ----------------------- | ----------------------------------- |
+| `public`   | 可内部 & 外部调用 | ✅ 可以从前端调用       | `function getTodos() public`        |
+| `view`     | 只读函数          | ✅ 不需要 Gas，立即返回 | `function balanceOf() public view`  |
+| `pure`     | 纯函数            | ✅ 不读状态，不需要 Gas | `function add(a, b) public pure`    |
+| `payable`  | 可接收 ETH        | ✅ 调用时可发送 ETH     | `function deposit() public payable` |
+| `private`  | 仅合约内部        | ❌ 前端无法调用         | `function _internal() private`      |
+| `external` | 只能外部调用      | ✅ 前端可以调用         | `function execute() external`       |
 
 ### 2.2 实际应用
 
@@ -238,17 +250,17 @@ event Transfer(address indexed from, address indexed to, uint256 value);
 
 ```typescript
 // 在前端使用 wagmi 监听事件
-import { useWatchContractEvent } from 'wagmi'
+import { useWatchContractEvent } from "wagmi";
 
 useWatchContractEvent({
-  address: '0x...',
+  address: "0x...",
   abi: contractABI,
-  eventName: 'TodoAdded',
+  eventName: "TodoAdded",
   onLogs(logs) {
-    console.log('New todo added:', logs)
+    console.log("New todo added:", logs);
     // 更新 UI
-  }
-})
+  },
+});
 ```
 
 ---
@@ -366,35 +378,35 @@ contract MyToken {
 
 ### 7.1 如何判断函数是否需要 Gas？
 
-| 函数类型 | 需要 Gas? | 需要签名? | 立即返回? |
-|----------|-----------|-----------|-----------|
-| `view` | ❌ 不需要 | ❌ 不需要 | ✅ 是 |
-| `pure` | ❌ 不需要 | ❌ 不需要 | ✅ 是 |
-| 普通函数 | ✅ 需要 | ✅ 需要 | ❌ 否（需等待确认） |
-| `payable` | ✅ 需要 | ✅ 需要 | ❌ 否（需等待确认） |
+| 函数类型  | 需要 Gas? | 需要签名? | 立即返回?           |
+| --------- | --------- | --------- | ------------------- |
+| `view`    | ❌ 不需要 | ❌ 不需要 | ✅ 是               |
+| `pure`    | ❌ 不需要 | ❌ 不需要 | ✅ 是               |
+| 普通函数  | ✅ 需要   | ✅ 需要   | ❌ 否（需等待确认） |
+| `payable` | ✅ 需要   | ✅ 需要   | ❌ 否（需等待确认） |
 
 ### 7.2 前端调用示例
 
 ```typescript
-import { useReadContract, useWriteContract } from 'wagmi'
+import { useReadContract, useWriteContract } from "wagmi";
 
 // ❌ 不需要 Gas - 使用 useReadContract
 const { data: balance } = useReadContract({
-  address: '0x...',
+  address: "0x...",
   abi: contractABI,
-  functionName: 'balanceOf',
-  args: [userAddress]
-})
+  functionName: "balanceOf",
+  args: [userAddress],
+});
 
 // ✅ 需要 Gas - 使用 useWriteContract
-const { writeContract } = useWriteContract()
+const { writeContract } = useWriteContract();
 
 await writeContract({
-  address: '0x...',
+  address: "0x...",
   abi: contractABI,
-  functionName: 'transfer',
-  args: [toAddress, amount]
-})
+  functionName: "transfer",
+  args: [toAddress, amount],
+});
 ```
 
 ---
@@ -403,11 +415,13 @@ await writeContract({
 
 ### 推荐学习路径
 
-1. **CryptoZombies** (3-4小时)
+1. **CryptoZombies** (3-4 小时)
+
    - https://cryptozombies.io/zh/course
    - 完成 Lesson 1-2 即可
 
 2. **Solidity by Example** (参考文档)
+
    - https://solidity-by-example.org
    - 需要时查阅
 
@@ -441,7 +455,8 @@ await writeContract({
 ## 十、下一步
 
 学完 Solidity 基础后，继续学习：
-- 📄 [02-合约交互API.md](./02-合约交互API.md) - 前端合约交互 API
+
+- 📄 [02-合约交互 API.md](./02-合约交互API.md) - 前端合约交互 API
 - 📄 [03-交易流程处理.md](./03-交易流程处理.md) - 交易流程处理
 
 ---
