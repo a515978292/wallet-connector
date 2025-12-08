@@ -58,7 +58,7 @@ contract SimpleStorage {
         emit ValueChanged(_value, msg.sender);
     }
 
-    // pure: 纯计算， 不读不写
+    // pure: 纯计算， 不读不写 （只用参数计算）
       function add(uint256 a, uint256 b) public pure returns (uint256) {
         return a + b;  // 只用参数计算
     }
@@ -282,8 +282,10 @@ function withdraw() public {
     // 只允许所有者提款
     require(msg.sender == owner, "Not owner");
 
+    //合约里的eth
     uint256 amount = balances[msg.sender];
     balances[msg.sender] = 0;
+    // payable(msg.sender)  => 把普通账户转化成可以收取eth的账户 , transfer(amount) 转账
     payable(msg.sender).transfer(amount);
 }
 
