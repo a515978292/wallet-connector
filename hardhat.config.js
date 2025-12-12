@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 require("@nomicfoundation/hardhat-viem");
-require("dotenv").config();
+require("dotenv").config({
+  path: process.env.DOTENV_CONFIG_PATH || ".env.local",
+});
 
 /** @type import('hardhat/config').HardhatUserConfig */
+console.log("SEPOLIA_RPC_URL", process.env.SEPOLIA_RPC_URL);
 module.exports = {
   solidity: {
     version: "0.8.20",
@@ -23,6 +26,10 @@ module.exports = {
       url: process.env.SEPOLIA_RPC_URL || "https://rpc.sepolia.org",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       chainId: 11155111,
+      timeout: 120000, // 添加：120秒超时（120000毫秒）
+      httpHeaders: {
+        Connection: "keep-alive",
+      },
     },
   },
   paths: {
