@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const hre = require("hardhat");
 
 async function main() {
@@ -8,7 +9,9 @@ async function main() {
 
   console.log(`✅ TodoList 合约已部署!`);
   console.log(`📍 合约地址: ${TodoList.address}`);
-  console.log(`🔗 区块链浏览器: https://sepolia.etherscan.io/address/${TodoList.address}`);
+  console.log(
+    `🔗 区块链浏览器: https://sepolia.etherscan.io/address/${TodoList.address}`
+  );
 
   // 保存合约地址到文件（方便前端使用）
   const fs = require("fs");
