@@ -1,0 +1,41 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/zhangteng/Desktop/web3/wallet-connector/hardhat/contracts/TodoList.sol": {
+      "lastModificationDate": 1765510388846,
+      "contentHash": "68be33bc3c5c64d1a912946d518d59ea",
+      "sourceName": "hardhat/contracts/TodoList.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "TodoList"
+      ]
+    }
+  }
+}
