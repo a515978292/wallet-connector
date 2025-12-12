@@ -15,18 +15,25 @@ async function main() {
 
   // 保存合约地址到文件（方便前端使用）
   const fs = require("fs");
+  const path = require("path");
+
   const contractInfo = {
     address: TodoList.address,
     network: hre.network.name,
     deployedAt: new Date().toISOString(),
   };
 
-  fs.writeFileSync(
-    "./contract-address.json",
-    JSON.stringify(contractInfo, null, 2)
-  );
+  // 确保 hardhat/result 目录存在
+  const resultDir = path.join(__dirname, "../result");
+  if (!fs.existsSync(resultDir)) {
+    fs.mkdirSync(resultDir, { recursive: true });
+  }
 
-  console.log("\n📝 合约地址已保存到 contract-address.json");
+  // 保存到 hardhat/result/contract-address.json
+  const outputPath = path.join(resultDir, "contract-address.json");
+  fs.writeFileSync(outputPath, JSON.stringify(contractInfo, null, 2));
+
+  console.log(`\n📝 合约地址已保存到 ${outputPath}`);
 }
 
 main()
