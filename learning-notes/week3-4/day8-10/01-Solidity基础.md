@@ -81,14 +81,15 @@ contract SimpleStorage {
 
 ### 2.1 函数修饰符
 
-| 关键字     | 含义              | 前端影响                | 示例                                |
-| ---------- | ----------------- | ----------------------- | ----------------------------------- |
-| `public`   | 可内部 & 外部调用 | ✅ 可以从前端调用       | `function getTodos() public`        |
-| `view`     | 只读函数          | ✅ 不需要 Gas，立即返回 | `function balanceOf() public view`  |
-| `pure`     | 纯函数            | ✅ 不读状态，不需要 Gas | `function add(a, b) public pure`    |
-| `payable`  | 可接收 ETH        | ✅ 调用时可发送 ETH     | `function deposit() public payable` |
-| `private`  | 仅合约内部        | ❌ 前端无法调用         | `function _internal() private`      |
-| `external` | 只能外部调用      | ✅ 前端可以调用         | `function execute() external`       |
+| 关键字     | 含义                | 前端影响                | 示例                                |
+| ---------- | ------------------- | ----------------------- | ----------------------------------- |
+| `public`   | 可内部 & 外部调用   | ✅ 可以从前端调用       | `function getTodos() public`        |
+| `external` | 只能外部调用        | ✅ 前端可以调用         | `function execute() external`       |
+| `private`  | 仅合约内部          | ❌ 前端无法调用         | `function _internal() private`      |
+| `internal` | 合约内部 & 继承合约 | ❌ 前端无法调用         | `function _helper() internal`       |
+| `view`     | 只读函数            | ✅ 不需要 Gas，立即返回 | `function balanceOf() public view`  |
+| `pure`     | 纯函数              | ✅ 不读状态，不需要 Gas | `function add(a, b) public pure`    |
+| `payable`  | 可接收 ETH          | ✅ 调用时可发送 ETH     | `function deposit() public payable` |
 
 ### 2.2 实际应用
 
